@@ -1,81 +1,93 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import loader from '../../Assets/Loader.gif'
+import Card from '../cards/Card'
 
-const Characters = () => {
-  const [characters, setCharacters] = useState([])
-  const [pageCount, setPageCount] = useState()
+interface Props {
+  setSelectedCharacter: Function
+  setOpenPupUp: Function
+}
+const Characters = (props: Props) => {
+  const scrollableDivRef = useRef(null)
+  const [characters, setCharacters]: any = useState([])
+  const [pageCount, setPageCount]: any = useState()
   const [currentPage, setCurrentPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
 
   const getUsers = async () => {
     const response = await fetch('https://rickandmortyapi.com/api/character')
     const FinalData = await response.json()
-    console.log(FinalData)
     setPageCount(FinalData.info.pages)
     setCharacters(FinalData.results)
+  }
+
+  const getNextPage = async () => {
+    const response = await fetch(
+      `https://rickandmortyapi.com/api/character?page=${currentPage}`
+    )
+    const FinalData: any = await response.json()
+    setTimeout(() => {
+      setCharacters((prev: any) => [...prev, ...FinalData.results])
+      setIsLoading((prev) => false)
+    }, 1000)
   }
 
   useEffect(() => {
     getUsers()
   }, [])
 
+  useEffect(() => {
+    if (isLoading) setCurrentPage((prev) => prev + 1)
+  }, [isLoading])
+
+  useEffect(() => {
+    if (currentPage > 1) {
+      if (currentPage < pageCount) getNextPage()
+      else {
+        setIsLoading(false)
+      }
+    }
+  }, [currentPage])
+
   const handleScroll = () => {
-    // Check if the user has reached the bottom of the page
-    if (
-      window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight
-    ) {
-      //   setIsLoading(true);
-      console.log('page end')
+    const div: any = scrollableDivRef.current
+
+    if (div.scrollTop + div.offsetHeight >= div.scrollHeight - 2) {
+      setIsLoading(true)
     }
   }
 
   useEffect(() => {
-    // Attach the scroll event listener when the component mounts
-    window.addEventListener('scroll', handleScroll)
-
+    const div: any = scrollableDivRef.current
+    div.addEventListener('scroll', handleScroll)
     return () => {
-      // Detach the scroll event listener when the component unmounts
-      window.removeEventListener('scroll', handleScroll)
+      div.removeEventListener('scroll', handleScroll)
     }
   }, [])
-
+  const handleClickSeeMore = (id: number) => {
+    props.setSelectedCharacter(id)
+    props.setOpenPupUp(true)
+  }
   return (
-    <div className="container">
-      {characters.map((item: any, index: any) => {
-        return (
-          <div className="card_item" key={item.id}>
-            <div className="card_inner">
-              <img src={item.image} alt="" />
-              <div className="userName">{item.name}</div>
-              {/* <div className="userUrl">{item.url}</div> */}
-              <div className="detail-box">
-                <div className="gitDetail">
-                  <span>Gender</span>
-                  {item.gender}
-                </div>
-                <div className="gitDetail">
-                  <span>Status</span>
-
-                  <div>
-                    {' '}
-                    {item.status === 'Dead' ? (
-                      <span className="dead"></span>
-                    ) : item.status === 'Alive' ? (
-                      <span className="alive"></span>
-                    ) : null}{' '}
-                    {item.status}
-                  </div>
-                </div>
-                <div className="gitDetail">
-                  <span>Species</span>
-                  {item.species}
-                </div>
-              </div>
-              <button className="seeMore">See More</button>
-            </div>
-          </div>
-        )
-      })}
-    </div>
+    <>
+      <div className="container" ref={scrollableDivRef}>
+        {characters.map((item: any, index: any) => {
+          return (
+            <Card
+              key={item.id}
+              handleClickSeeMore={handleClickSeeMore}
+              character={item}
+            />
+          )
+        })}
+      </div>
+      <div
+        className="loader"
+        style={{ visibility: isLoading ? 'visible' : 'hidden' }}
+      >
+        Loading...
+        {/* <img src={loader} alt="Loader"></img> */}
+      </div>
+    </>
   )
 }
 
