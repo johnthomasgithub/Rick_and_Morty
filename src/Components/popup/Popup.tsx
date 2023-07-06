@@ -117,7 +117,7 @@ const Popup = (props: Props) => {
                   {chapter.length > 0 && (
                     <div className="gitDetail">
                       <span>Chapters</span>
-                      {chapter.map((element: any, index: any) => {
+                      {chapter.map((element, index) => {
                         return <div key={index}>{element}</div>
                       })}
                     </div>
