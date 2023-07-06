@@ -74,7 +74,7 @@ const Characters = (props: Props) => {
           return (
             <Card
               key={item.id}
-              handleClickSeeMore={handleClickSeeMore}
+              handelClickSeeMore={handleClickSeeMore}
               character={item}
             />
           )
