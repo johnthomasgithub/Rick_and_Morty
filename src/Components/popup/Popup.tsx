@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
 import Close from '../../Assets/close.svg'
-import Card from '../cards/Card'
 interface Props {
   charId: number
   setOpenPupUp: Function

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import loader from '../../Assets/Loader.gif'
 import Card from '../cards/Card'
 
 interface Props {
@@ -74,7 +73,7 @@ const Characters = (props: Props) => {
           return (
             <Card
               key={item.id}
-              handelClickSeeMore={handleClickSeeMore}
+              handleClickSeeMore={handleClickSeeMore}
               character={item}
             />
           )
