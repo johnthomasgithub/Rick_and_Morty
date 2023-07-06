@@ -21,6 +21,8 @@
   "author": "Vishwas",
   "license": "MIT",
   "dependencies": {
+    "file-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^2.7.6",
     "path": "^0.12.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
