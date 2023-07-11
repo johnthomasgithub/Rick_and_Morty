@@ -18,7 +18,7 @@
     "Starter Template",
     "Boilerplate"
   ],
-  "author": "Vishwas",
+  "author": "John",
   "license": "MIT",
   "dependencies": {
     "file-loader": "^6.2.0",

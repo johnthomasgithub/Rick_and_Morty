@@ -23,7 +23,7 @@ module.exports = {
       //   use: [MiniCssExtractPlugin.loader, 'css-loader'],
       // },
       {
-        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+        test: /\.(?:ico|gif|png|jpg|jpeg|svg)$/i,
         // type: 'asset/resource',
         use: {
           loader: 'file-loader',
@@ -31,7 +31,7 @@ module.exports = {
         },
       },
       {
-        test: /\.(woff(2)?|eot|ttf|otf|svg|pdf)$/,
+        test: /\.(woff(2)?|eot|ttf|otf|pdf)$/,
         type: 'asset/inline',
         use: {
           loader: 'file-loader',
